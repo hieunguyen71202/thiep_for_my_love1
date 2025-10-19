@@ -36,31 +36,31 @@
 
     .photo {
       position: absolute;
-      bottom: 20px;
-      right: 20px;
-      width: 25%;
-      max-width: 240px;
+      bottom: 30px;
+      right: 40px;
+      width: 18%;             /* giảm từ 25% → 18% để ảnh nhỏ hơn */
+      max-width: 180px;       /* ảnh không vượt quá 180px */
       border: 5px solid #fff;
       border-radius: 16px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.25);
-      transform: rotate(5deg);      /* nghiêng sang phải */
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      transform: rotate(6deg); /* nghiêng sang phải nhẹ */
       opacity: 0.95;
-      z-index: 0;                   /* nằm dưới chữ */
-  }
-  
-  /* Trên điện thoại – ảnh tự xuống dưới phần chữ */
-  @media (max-width: 768px) {
+      z-index: 1;             /* hiển thị phía trên nền */
+    }
+    
+    /* Trên điện thoại – ảnh tự xuống dưới phần chữ */
+    @media (max-width: 768px) {
       .photo {
           position: relative;
           display: block;
           margin: 30px auto 0 auto;
           transform: rotate(0deg);
           width: 60%;
-          max-width: 260px;
-          z-index: 0;
+          max-width: 240px;
+          z-index: 1;
           opacity: 1;
       }
-  }
+    }
 
     
     .falling {
@@ -207,5 +207,6 @@ setInterval(() => {
 }, 400);
 </script></body>
 </html>
+
 
 
