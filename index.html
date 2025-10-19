@@ -28,14 +28,18 @@
 
     .photo {
       position: absolute;
-      bottom: 40px;
-      right: 40px;
-      width: 25%;
-      transform: rotate(-8deg);
-      border: 6px solid white;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      z-index: 1;
-    }
+      bottom: 20px;         /* chỉnh khoảng cách so với mép dưới */
+      left: 5%;             /* đẩy ảnh ra sát góc phải */
+      width: 22%;           /* thu nhỏ một chút để không che chữ */
+      max-width: 250px;     /* giới hạn kích thước tối đa */
+      border: 5px solid #fff;
+      border-radius: 16px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+      transform: rotate(-5deg);
+      z-index: 0;           /* để nằm dưới lớp chữ */
+      opacity: 0.95;        /* mờ nhẹ để chữ nổi hơn */
+  }
+
     
     .falling {
       position: fixed;
@@ -171,7 +175,7 @@ window.addEventListener('load', async () => {
 </script>
 <script>
 // Hoa & bướm rơi
-const icons = ['🌸','🦋','💮','🌷','🌺'];
+const icons = ['🌸','💮','🌷','🌺'];
 setInterval(() => {
   const el = document.createElement('div');
   el.classList.add('falling');
@@ -183,4 +187,5 @@ setInterval(() => {
 }, 400);
 </script></body>
 </html>
+
 
