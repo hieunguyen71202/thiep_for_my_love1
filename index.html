@@ -1,1 +1,185 @@
 
+<!DOCTYPE html>
+
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Thiệp 20/10 — Dành tặng em</title>
+<style>
+  :root{/*pink:#ffdfe6;--accent:#ff6b81;--card:#fff;*/}
+  body{margin:0;font-family: 'Segoe UI', Roboto, Arial, sans-serif;background:linear-gradient(180deg,#fff 0%,#fff5f7 60%);color:#333;}
+  .wrap{max-width:900px;margin:30px auto;padding:24px;}
+  .card{background:var(--card);border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,0.08);overflow:hidden;position:relative;padding:36px 40px 120px;}
+  /* envelope panel */
+  .letter{max-width:680px;margin:0 auto;background:linear-gradient(180deg,#fff,#fff);border-radius:12px;padding:22px;border:6px solid rgba(255,200,210,0.9);box-sizing:border-box;position:relative;}
+  .butterfly{position:absolute;right:30px;top:-12px;transform:rotate(10deg);opacity:0.95;font-size:36px;}
+  .flower-deco{position:absolute;left:20px;bottom:16px;opacity:0.95;}
+  .message{font-size:18px;line-height:1.7;color:#222;font-family:'Segoe UI', 'Tahoma', sans-serif;}
+  .polaroid{position:absolute;right:36px;bottom:36px;width:220px;background:#fff;padding:10px;border-radius:6px;box-shadow:0 8px 18px rgba(0,0,0,0.12);transform:rotate(-12deg);}
+  .polaroid img{display:block;width:100%;height:auto;border-radius:4px;}
+  .polaroid .cap{font-size:12px;color:#666;text-align:right;margin-top:6px;}
+  .flowers{position:absolute;left:28px;bottom:28px;width:180px;}
+  .controls{position:absolute;right:36px;top:36px;display:flex;gap:8px;}
+  .btn{background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:600;box-shadow:0 6px 12px rgba(255,107,129,0.18);}
+  .btn.secondary{background:#fff;color:var(--accent);border:1px solid rgba(255,107,129,0.12);}
+  footer.note{text-align:center;margin-top:18px;color:#777;font-size:14px;}
+  @media (max-width:600px){ .card{padding:18px;} .polaroid{right:14px;bottom:20px;width:160px;transform:rotate(-8deg);}}
+
+    .photo {
+      position: absolute;
+      bottom: 40px;
+      right: 40px;
+      width: 25%;
+      transform: rotate(-8deg);
+      border: 6px solid white;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+    
+    .falling {
+      position: fixed;
+      top: -10px;
+      font-size: 24px;
+      animation: fallAnim linear forwards;
+      pointer-events: none;
+    }
+    @keyframes fallAnim {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    </style>
+</head>
+<body>
+<div class="wrap">
+<div aria-label="Thiệp 20/10" class="card" role="region">
+<div class="controls">
+<button aria-pressed="false" class="btn" id="playBtn">▶ Phát nhạc</button>
+<button aria-pressed="false" class="btn secondary" id="muteBtn">🔈 Tắt tiếng</button>
+</div>
+<div class="letter">
+<div class="butterfly">🦋</div>
+<div style="height:12px;"></div>
+<div class="message" id="messageText"><p style="margin: 0 0 10px 0;">Em yêu của anh,</p><br/><p style="margin: 0 0 10px 0;">Ngày Phụ nữ Việt Nam 20/10, anh muốn gửi đến em những lời chân thành nhất. Có lẽ anh không giỏi nói lời ngọt ngào mỗi ngày, nhưng trong lòng anh luôn biết rằng em là điều quý giá nhất.</p><br/><p style="margin: 0 0 10px 0;">Mong dù hai ta không ở gần nhau, nhưng anh mong em thật vui vẻ. Khi nào em buồn thì hãy nhớ rằng là anh vẫn luôn lắng nghe em, luôn trân trọng em.</p><br/><p style="margin: 0 0 10px 0;">Chúc em luôn xinh đẹp, hạnh phúc. Anh yêu em. 💖</p><br/><p style="margin: 0 0 10px 0;">— From your love 💗</p></div>
+</div>
+<!-- decorative flowers -->
+<div class="flowers">
+<!-- simple SVG flower illustration -->
+<svg aria-hidden="true" height="180" viewbox="0 0 120 120" width="180" xmlns="http://www.w3.org/2000/svg">
+<defs><lineargradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#ffd1de"></stop><stop offset="1" stop-color="#ff9db0"></stop></lineargradient></defs>
+<g transform="translate(10,10)">
+<circle cx="40" cy="40" fill="url(#g)" r="20"></circle>
+<path d="M40 10 C50 16,58 16,66 10 C60 24,68 36,56 44 C46 52,34 44,28 36 C18 26,22 18,40 10" fill="rgba(255,150,180,0.9)" opacity="0.95"></path>
+</g>
+</svg>
+</div>
+<!-- polaroid photo (embedded image) -->
+<div aria-label="Ảnh hai bạn" class="polaroid" role="img">
+<img alt="Ảnh hai bạn" src="anh.jpg"/>
+<div class="cap">Mãi bên nhau 💕</div>
+</div>
+</div>
+<footer class="note">Mở thiệp và bấm 'Phát nhạc' nếu âm thanh không tự chạy (một số trình duyệt yêu cầu tương tác).</footer>
+</div>
+<script>
+// Simple WebAudio background melody (looping gentle notes). No external file.
+let audioCtx;
+let isPlaying = false;
+let globalGain;
+let oscNodes = [];
+let mute = false;
+
+function createAndPlay() {
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  globalGain = audioCtx.createGain();
+  globalGain.gain.value = 0.18; // gentle volume
+  globalGain.connect(audioCtx.destination);
+
+  // A simple motif (frequencies in Hz) - arpeggio-like
+  const motif = [440, 523.25, 659.25, 783.99]; // A4, C5, E5, G5 (pleasant major)
+  let start = audioCtx.currentTime + 0.05;
+  const barDuration = 2.4;
+
+  function scheduleLoop(offset) {
+    for (let i=0;i<motif.length;i++) {
+      const t = start + offset + i*(barDuration/motif.length);
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = motif[i];
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(1, t+0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t+ (barDuration/motif.length)*0.95);
+      osc.connect(gain);
+      gain.connect(globalGain);
+      osc.start(t);
+      osc.stop(t + (barDuration/motif.length) * 1.05);
+      // keep reference for stopping
+      oscNodes.push(osc);
+    }
+    // schedule next loop cycle
+    start += barDuration * 0.98;
+    if (isPlaying) requestAnimationFrame(() => scheduleLoop(0));
+  }
+
+  isPlaying = true;
+  scheduleLoop(0);
+}
+
+function stopAudio() {
+  if (!audioCtx) return;
+  // close context to stop everything
+  audioCtx.close();
+  audioCtx = null;
+  isPlaying = false;
+  oscNodes = [];
+}
+
+document.getElementById('playBtn').addEventListener('click', async function() {
+  if (!isPlaying) {
+    // resume or create audio context on user gesture
+    try { createAndPlay(); }
+    catch(e) { console.error(e); }
+    this.textContent = '⏸ Dừng nhạc';
+    this.setAttribute('aria-pressed','true');
+  } else {
+    stopAudio();
+    this.textContent = '▶ Phát nhạc';
+    this.setAttribute('aria-pressed','false');
+  }
+});
+
+document.getElementById('muteBtn').addEventListener('click', function() {
+  if (!globalGain) return;
+  mute = !mute;
+  globalGain.gain.value = mute ? 0 : 0.18;
+  this.textContent = mute ? '🔇 Đã tắt' : '🔈 Tắt tiếng';
+  this.setAttribute('aria-pressed', String(mute));
+});
+
+// Attempt to autoplay (may be blocked); try resume on load
+window.addEventListener('load', async () => {
+  try {
+    // Some browsers require a gesture to resume audio; we still attempt softly
+    if (typeof AudioContext !== 'undefined' && audioCtx == null) {
+      // do nothing now; user can press Play
+    }
+  } catch(e){ console.warn('Audio autoplay attempt failed', e); }
+});
+</script>
+<script>
+// Hoa & bướm rơi
+const icons = ['🌸','🦋','💮','🌷','🌺'];
+setInterval(() => {
+  const el = document.createElement('div');
+  el.classList.add('falling');
+  el.textContent = icons[Math.floor(Math.random() * icons.length)];
+  el.style.left = Math.random() * 100 + 'vw';
+  el.style.animationDuration = (4 + Math.random() * 3) + 's';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 7000);
+}, 400);
+</script></body>
+</html>
