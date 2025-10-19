@@ -27,18 +27,33 @@
   @media (max-width:600px){ .card{padding:18px;} .polaroid{right:14px;bottom:20px;width:160px;transform:rotate(-8deg);}}
 
     .photo {
-      position: absolute;
-      bottom: 20px;         /* chỉnh khoảng cách so với mép dưới */
-      left: 5%;             /* đẩy ảnh ra sát góc phải */
-      width: 22%;           /* thu nhỏ một chút để không che chữ */
-      max-width: 250px;     /* giới hạn kích thước tối đa */
-      border: 5px solid #fff;
+      position: fixed;           /* cố định ảnh để không che chữ */
+      bottom: 20px;              /* cách mép dưới */
+      right: 20px;               /* cách mép phải */
+      width: 20%;                /* chiếm 20% màn hình */
+      max-width: 220px;          /* không vượt quá 220px */
+      border: 5px solid #fff;    
       border-radius: 16px;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.25);
       transform: rotate(-5deg);
-      z-index: 0;           /* để nằm dưới lớp chữ */
-      opacity: 0.95;        /* mờ nhẹ để chữ nổi hơn */
+      opacity: 0.9;
+      z-index: -1;               /* Đưa ảnh xuống dưới chữ */
   }
+  
+  /* 🔹 Khi xem trên điện thoại (màn hình nhỏ hơn 768px) */
+  @media (max-width: 768px) {
+      .photo {
+          position: relative;    /* để ảnh xuống dưới phần chữ */
+          display: block;
+          margin: 30px auto 0 auto;
+          transform: rotate(0deg);
+          width: 60%;
+          max-width: 260px;
+          z-index: 0;
+          opacity: 1;
+      }
+  }
+
 
     
     .falling {
@@ -187,5 +202,6 @@ setInterval(() => {
 }, 400);
 </script></body>
 </html>
+
 
 
